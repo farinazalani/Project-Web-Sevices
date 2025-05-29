@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BMI Calculator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          background: #f0f4f8;
+          padding: 20px;
+        }
+        h1, h2 {
+          color: #333;
+        }
+        .section {
+          background-color: #ffffff;
+          padding: 30px;
+          border-radius: 12px;
+          max-width: 500px;
+          margin: auto;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          padding-left: 100px;
+          padding-right: 100px;
+        }
+        label {
+          display: block;
+          margin-top: 10px;
+        }
+        input {
+          padding: 8px;
+          margin-top: 5px;
+          width: 100%;
+          border-radius: 6px;
+          border: 1px solid #ccc;
+          padding-bottom: 15px;
+        }
+        button {
+          margin-top: 15px;
+          padding: 10px 20px;
+          background-color: #0077cc;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          margin-left: 40%;
+          font-size: 17px;
+          margin-top: 50px;
+          margin-bottom: 20px;
+        }
+        button:hover {
+          background-color: #005fa3;
+        }
+        .result {
+          margin-top: 10px;
+          font-weight: bold;
+        }
+    </style>
+    <script>
+        function validateForm() {
+            const height = document.forms["bmiForm"]["height"].value;
+            const weight = document.forms["bmiForm"]["weight"].value;
+
+            if (height === "" || isNaN(height) || height <= 0) {
+                alert("Please enter a valid height in cm.");
+                return false;
+            }
+            if (weight === "" || isNaN(weight) || weight <= 0) {
+                alert("Please enter a valid weight in kg.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <!-- i. BMI Calculation -->
+    <form name="bmiForm" action="bmi" onsubmit="return validateForm()">
+        <div class="section">
+            <h2> BMI Calculator: </h2>
+            <label for="bmiHeight">Height (cm):</label>
+            <input type="number" name="height" />
+            <label for="bmiWeight">Weight (kg):</label>
+            <input type="number" name="weight" />
+            <button type="submit">Calculate BMI</button>
+        </div>
+    </form>
+</body>
+</html>

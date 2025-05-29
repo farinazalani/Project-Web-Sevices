@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {
+              font-family: 'Segoe UI', sans-serif;
+              background-color: #eef2f5;
+              padding: 50px;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+            }
+
+            h1 {
+              margin-bottom: 40px;
+              color: #333;
+            }
+
+            .card-container {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+              gap: 20px;
+              width: 100%;
+              max-width: 1000px;
+              margin-top: 50px;
+            }
+            
+            .card-container1 {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+              gap: 20px;
+              width: 100%;
+              max-width: 800px;
+            }
+
+            .card {
+              background-color: burlywood;
+              padding: 30px;
+              border-radius: 12px;
+              text-align: center;
+              box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+              transition: transform 0.2s ease;
+              cursor: pointer;
+              text-decoration: none;
+              color: inherit;
+              margin-bottom: 50px;
+            }
+
+            .card:hover {
+              transform: scale(1.03);
+              background-color: bisque;
+            }
+            
+            .card h2 {
+              margin: 0;
+              font-size: 20px;
+              color: #0077cc;
+            }
+            
+            .back-container {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+              gap: 20px;
+              width: 60%;
+              max-width: 1000px;
+              margin-top: 20px;
+            }
+            
+            .back-container {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+              gap: 20px;
+              width: 20%;
+              max-width: 800px;
+              padding-left: 35%;
+            }
+            
+            .back {
+              background-color: maroon;
+              padding: 15px;
+              border-radius: 12px;
+              text-align: center;
+              box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+              transition: transform 0.2s ease;
+              cursor: pointer;
+              text-decoration: none;
+              color: inherit;
+              margin-bottom: 30px;
+            }
+            
+            .back:hover {
+              transform: scale(1.03);
+              background-color: red;
+            }
+            
+            .back h2 {
+              margin: 0;
+              font-size: 18px;
+              color: #ffffff;
+            }
+            
+            form {
+                background-color: #ffffff;
+                padding: 30px;
+                border-radius: 12px;
+                max-width: 1000px;
+                margin: auto;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                padding-left: 100px;
+                padding-right: 100px;
+            }
+
+            form h1 {
+                margin-bottom: 25px;
+                color: #333;
+                text-align: center;
+                font-family: sans-serif;
+            }
+            
+            form h2 {
+                margin-bottom: 25px;
+                color: #333;
+                font-size: 24px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+
+        <form>
+            
+            <h1><b>Health Tools Dashboard:</b></h1>
+            
+            <div class="card-container">
+                <a class="card" href="bmi.html"><h2> BMI Calculator</h2></a>
+                <a class="card" href="bodyfat.html"><h2> Body Fat %</h2></a>
+                <a class="card" href="calories.html"><h2> Calories Burn Rate</h2></a>
+            </div>
+            <div class="card-container1">
+                <a class="card" href="ibw.html"><h2> IBW </h2></a>
+                <a class="card" href="water.html"><h2> Water Intake </h2></a>
+            </div>
+            <div class="back-container">
+            <a class="back" href="index.html"><h2> Back </h2></a>
+            </div>
+        </form>
+    </body>
+</html>
+
+
