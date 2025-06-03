@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Body Fat Percentage Calculator</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        input, select, button {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        #hipContainer {
+            display: none;
+        }
+    </style>
+    
+</head>
+
+<body>
+    <div class="container">
+        <h1>Body Fat Percentage Calculator</h1>
+        <form id="bfForm" action="BodyFatClient" method="post">
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" required>
+                <option value="" disabled selected>Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+
+            <label for="weight">Weight (kg)</label>
+            <input type="number" id="weight" name="weight" placeholder="Weight (kg)" required />
+
+            <label for="height">Height (cm)</label>
+            <input type="number" id="height" name="height" placeholder="Height (cm)" required />
+
+            <label for="waist">Waist Circumference (cm)</label>
+            <input type="number" id="waist" name="waist" placeholder="Waist Circumference (cm)" required />
+
+            <label for="neck">Neck Circumference (cm)</label>
+            <input type="number" id="neck" name="neck" placeholder="Neck Circumference (cm)" required />
+
+            <div id="hipContainer">
+                <label for="hip">Hip Circumference (cm)</label>
+                <input type="number" id="hip" name="hip" placeholder="Hip Circumference (cm)" />
+            </div>
+
+            <button type="submit">Calculate Body Fat</button>
+        </form>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const genderEl = document.getElementById('gender');
+        const hipContainer = document.getElementById('hipContainer');
+        const hipInput = document.getElementById('hip');
+
+        genderEl.addEventListener('change', () => {
+            if (genderEl.value === "Female") {
+                hipContainer.style.display = "block";
+                hipInput.required = true;
+            } else {
+                hipContainer.style.display = "none";
+                hipInput.required = false;
+                hipInput.value = "";
+            }
+            document.getElementById('result').innerText = "";
+        });
+    </script>
+</body>
+</html>
+
