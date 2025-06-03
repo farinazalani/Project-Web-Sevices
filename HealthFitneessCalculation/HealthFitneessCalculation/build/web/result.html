@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Calories Burned Result</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h2 {
+      color: #333;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      margin: 20px 0 10px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .result-detail {
+      font-size: 18px;
+      margin: 6px 0;
+    }
+
+    .highlight {
+      color: #28a745;
+      font-weight: bold;
+    }
+
+    .motivation {
+      font-size: 18px;
+      color: #007bff;
+      margin-top: 20px;
+      font-style: italic;
+    }
+
+    .error {
+      color: #dc3545;
+      font-weight: bold;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 10px 20px;
+      text-decoration: none;
+      background-color: #2e86de;
+      color: white;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    a:hover {
+      background-color: #1b4f72;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2 id="header"></h2>
+
+    <div id="results" style="display:none;">
+      <div class="section-title">Here your result:</div>
+      <p class="result-detail"><strong>Activity:</strong> <span id="activityText"></span></p>
+      <p class="result-detail"><strong>Duration:</strong> <span id="durationText"></span> minutes</p>
+      <p class="result-detail"><strong>Weight:</strong> <span id="weightText"></span> kg</p>
+      <p class="result-detail"><strong>Height:</strong> <span id="heightText"></span> cm</p>
+      <p class="result-detail highlight"><strong>Calories Burned:</strong> <span id="calories"></span> kcal</p>
+      <p class="motivation" id="message"></p>
+    </div>
+
+    <p class="error" id="errorMessage" style="display:none;"></p>
+
+    <a href="index.html">🔁 Calculate Again</a>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const weight = parseFloat(params.get("weight"));
+    const duration = parseFloat(params.get("duration"));
+    const activity = params.get("activity");
+    const height = parseFloat(params.get("height"));
+
+    const MET_VALUES = {
+      running: 9.8,
+      walking: 3.8,
+      cycling: 7.5
+    };
+
+    const headerEl = document.getElementById("header");
+    const resultsEl = document.getElementById("results");
+    const errorEl = document.getElementById("errorMessage");
+
+    const activityText = document.getElementById("activityText");
+    const durationText = document.getElementById("durationText");
+    const weightText = document.getElementById("weightText");
+    const heightText = document.getElementById("heightText");
+    const caloriesText = document.getElementById("calories");
+    const messageEl = document.getElementById("message");
+
+    if (!activity || isNaN(weight) || isNaN(duration) || isNaN(height) || !MET_VALUES[activity]) {
+      headerEl.innerText = "";
+      errorEl.style.display = "block";
+      errorEl.innerText = "❌ Invalid input. Please go back and try again.";
+    } else {
+      headerEl.innerText = "🎉 Congratulations!";
+      resultsEl.style.display = "block";
+
+      const durationHours = duration / 60;
+      const caloriesBurned = MET_VALUES[activity] * weight * durationHours;
+      const roundedCalories = Math.round(caloriesBurned * 100) / 100;
+
+      activityText.innerText = activity.charAt(0).toUpperCase() + activity.slice(1);
+      durationText.innerText = duration;
+      weightText.innerText = weight;
+      heightText.innerText = height;
+      caloriesText.innerText = roundedCalories;
+      messageEl.innerText = "Keep going! You're making amazing progress 💪";
+    }
+  </script>
+
+</body>
+</html>

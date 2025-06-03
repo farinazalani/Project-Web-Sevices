@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Calories Burn Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #2e86de;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1b4f72;
+    }
+
+    #result {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 18px;
+      color: #28a745;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Calories Burn Calculator</h2>
+    <form id="calorieForm">
+
+      <label for="height">Height (cm):</label>
+      <input type="number" id="height" required>
+
+      <label for="weight">Weight (kg):</label>
+      <input type="number" id="weight" required>
+
+      <label for="duration">Duration (minutes):</label>
+      <input type="number" id="duration" required>
+
+      <label for="activity">Activity Type:</label>
+      <select id="activity" required>
+        <option value="">-- Select Activity --</option>
+        <option value="running">Running</option>
+        <option value="walking">Walking</option>
+        <option value="cycling">Cycling</option>
+      </select>
+
+      <button type="submit">Calculate</button>
+    </form>
+
+    <p id="result"></p>
+  </div>
+
+  <script>
+    const MET_VALUES = {
+      running: 9.8,
+      walking: 3.8,
+      cycling: 7.5
+    };
+
+    document.getElementById("calorieForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const height = parseFloat(document.getElementById("height").value);
+      const weight = parseFloat(document.getElementById("weight").value);
+      const duration = parseFloat(document.getElementById("duration").value);
+      const activity = document.getElementById("activity").value;
+
+      if (!activity || !MET_VALUES[activity]) {
+        document.getElementById("result").innerText = "❌ Please select a valid activity.";
+        return;
+      }
+
+      if (weight <= 0 || duration <= 0 || height <= 0) {
+        document.getElementById("result").innerText = "❌ Please enter valid numbers.";
+        return;
+      }
+
+      const query = `weight=${weight}&duration=${duration}&activity=${activity}&height=${height}`;
+      window.location.href = "result.html?" + query;
+    });
+  </script>
+
+</body>
+</html>
