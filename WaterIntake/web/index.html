@@ -1,109 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Water Intake Calculator</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #a8edea, #fed6e3);
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 500px;
-      margin: 60px auto;
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 25px;
-      color: #333;
-    }
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
-    }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #5cdb95;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      color: white;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    button:hover {
-      background-color: #379683;
-    }
-    .result {
-      margin-top: 20px;
-      padding: 15px;
-      background-color: #e6f9f0;
-      border: 1px solid #b2dfdb;
-      border-radius: 8px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Water Intake Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e3f2fd;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #0d47a1;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            color: #1565c0;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #90caf9;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #1e88e5;
+            color: white;
+            padding: 12px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1565c0;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #555;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Daily Water Intake Calculator</h2>
-    <form id="waterForm">
-      <label for="weight">Weight (kg):</label>
-      <input type="number" id="weight" required />
 
-      <label for="activity">Activity Level:</label>
-      <select id="activity" required>
-        <option value="">-- Please select --</option>
-        <option value="light">Light</option>
-        <option value="moderate">Moderate</option>
-        <option value="intense">Intense</option>
-      </select>
+<div class="container">
+    <h2>Water Intake Calculator</h2>
+    <form action="WaterIntakeCalcService" method="post">
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender" required>
+            <option value="">--Select--</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
 
-      <button type="submit">Calculate</button>
+        <label for="weightKg">Weight (kg):</label>
+        <input type="number" id="weightKg" name="weightKg" step="0.1" required>
+
+        <label for="activityLevel">Activity Level:</label>
+        <select id="activityLevel" name="activityLevel" required>
+            <option value="">--Select--</option>
+            <option value="light">Light</option>
+            <option value="moderate">Moderate</option>
+            <option value="intense">Intense</option>
+        </select>
+
+        <button type="submit">Calculate Water Intake</button>
     </form>
+</div>
 
-    <div class="result" id="result" style="display: none;"></div>
-  </div>
-
-  <script>
-    document.getElementById('waterForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const weight = parseFloat(document.getElementById('weight').value);
-      const activity = document.getElementById('activity').value;
-
-      if (isNaN(weight) || weight <= 0 || activity === "") {
-        alert("Please enter a valid weight and activity level.");
-        return;
-      }
-
-      let multiplier = 1.0;
-      if (activity === "moderate") multiplier = 1.2;
-      if (activity === "intense") multiplier = 1.4;
-
-      const base = weight * 0.033;
-      const total = base * multiplier;
-
-      document.getElementById('result').style.display = "block";
-      document.getElementById('result').innerHTML =
-        `<strong>Recommended water intake:</strong> ${total.toFixed(2)} liters per day.`;
-    });
-  </script>
 </body>
 </html>
