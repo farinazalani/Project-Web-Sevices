@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Tools Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <div id="user-info-section" class="user-info-wrapper active">
+        <div class="user-info-card">
+            <h2>Enter Your Information</h2>
+            <p>Please provide your details to personalize your health tool experience.</p>
+
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" placeholder="e.g., JohnDoe" required>
+            </div>
+            <div class="form-group">
+                <label for="ic-number">Malaysian IC Number (YYMMDD-PB-###G):</label>
+                <input type="text" id="ic-number" placeholder="e.g., 900101-14-5678" pattern="\d{6}-\d{2}-\d{4}" required>
+                <small>Format: YYMMDD-PB-#### (e.g., 900101-14-5678)</small>
+            </div>
+            <div class="form-group">
+                <label for="initial-weight">Weight (kg):</label>
+                <input type="number" id="initial-weight" placeholder="e.g., 70" min="1" step="0.1" required>
+            </div>
+            <div class="form-group">
+                <label for="initial-height">Height (cm):</label>
+                <input type="number" id="initial-height" placeholder="e.g., 175" min="1" step="0.1" required>
+            </div>
+            <button class="btn btn-primary" id="submitUserInfo">Proceed to Dashboard</button>
+            <div class="result-box" id="userInfoError" style="color: red; margin-top: 15px;"></div>
+        </div>
+    </div>
+
+    <div class="dashboard-container hidden" id="health-dashboard-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>Health Tools</h3>
+                <button class="toggle-sidebar-btn" id="toggleSidebarBtn">☰</button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#dashboard" class="nav-link active" data-target="dashboard-section"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                    <li><a href="bmi" class="nav-link" data-target="bmi-calculator-section"><i class="fas fa-calculator"></i> <span>BMI Calculator</span></a></li>
+                    <li><a href="#bodyfat" class="nav-link" data-target="body-fat-calculator-section"><i class="fas fa-ruler-combined"></i> <span>Body Fat %</span></a></li>
+                    <li><a href="#calories" class="nav-link" data-target="calorie-calculator-section"><i class="fas fa-fire"></i> <span>Calorie Needs</span></a></li>
+                    <li><a href="#ibw" class="nav-link" data-target="ibw-calculator-section"><i class="fas fa-weight"></i> <span>Ideal Body Weight</span></a></li>
+                    <li><a href="#water" class="nav-link" data-target="water-intake-calculator-section"><i class="fas fa-tint"></i> <span>Water Intake</span></a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-user-info">
+                <h4><i class="fas fa-user-circle"></i> <span id="displayUsername">User</span></h4>
+                <p>Age: <span id="displayAge">--</span></p>
+                <p>Gender: <span id="displayGender">--</span></p>
+                <p>Weight: <span id="displayWeight">--</span> kg</p>
+                <p>Height: <span id="displayHeight">--</span> cm</p>
+                <button class="btn-change-info" id="changeUserInfoBtn"><i class="fas fa-edit"></i> Change Info</button>
+            </div>
+        </aside>
+
+        <main class="main-content" id="mainContent">
+            <header class="main-header">
+                <h2 id="currentToolTitle">Dashboard Overview</h2>
+            </header>
+
+            <section id="dashboard-section" class="tool-section active">
+                <div class="tool-card welcome-card">
+                    <h2>Welcome, <span id="welcomeUsername">User</span>!</h2>
+                    <p>Your personalized health hub. Use the sidebar to access various health tools tailored to your data.</p>
+                </div>
+
+                <div class="dashboard-overview">
+                    <div class="card summary-card">
+                        <h3><i class="fas fa-chart-line"></i> Quick Stats</h3>
+                        <p>Track your health metrics over time.</p>
+                        <a href="#bmi" class="btn btn-primary nav-link" data-target="bmi-calculator-section">Calculate BMI</a>
+                    </div>
+                    <div class="card summary-card">
+                        <h3><i class="fas fa-dumbbell"></i> Fitness Goals</h3>
+                        <p>Plan your workouts and nutrition.</p>
+                        <a href="#calories" class="btn btn-primary nav-link" data-target="calorie-calculator-section">Estimate Calories</a>
+                    </div>
+                    <div class="card summary-card">
+                        <h3><i class="fas fa-heartbeat"></i> Healthy Living</h3>
+                        <p>Tips for a healthier lifestyle.</p>
+                        <a href="#water" class="btn btn-primary nav-link" data-target="water-intake-calculator-section">Check Water Intake</a>
+                    </div>
+                </div>
+
+                <div class="recent-updates">
+                    <h3><i class="fas fa-bell"></i> Latest Health News</h3>
+                    <ul>
+                        <li>New study on plant-based diets released.</li>
+                        <li>Tips for improving sleep quality.</li>
+                        <li>Importance of regular physical activity.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="bmi-calculator-section" class="tool-section">
+                <div class="tool-card">
+                    <div class="container">
+                        <h1>BMI Calculator</h1>
+                        <p>Body Mass Index (BMI)col is a measure that uses your height and weight to work out if your weight is healthy.</p>
+
+                        <form action="bmi" method="post">
+                            <div class="form-group">
+                                <label for="weight">Weight (kg):</label>
+                                <input type="text" id="bmi-weight" name="weight" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="height">Height (cm):</label>
+                                <input type="text" id="bmi-height" name="height" required>
+                            </div>
+
+                            <button class="btn btn-calculate" type="submit" >Calculate BMI</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            
+            <section id="body-fat-calculator-section" class="tool-section">
+                <div class="tool-card">
+                    
+                    <h2>Body Fat % Calculator</h2>
+                    <p>Estimate your body fat percentage using various methods. This calculation uses the U.S. Navy Method for simplicity.</p>
+                    
+                    <form action="bodyFatCalculator" method="post">
+                        <div class="form-group">
+                            <label for="bf-gender">Gender:</label>
+                            <select id="bf-gender" name="bf-gender" onchange="toggleHipField()" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bf-weight">Weight (kg):</label>
+                            <input type="text" id="bf-weight" name="bf-weight" placeholder="e.g., 70.5" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bf-height">Height (cm):</label>
+                            <input type="text" id="bf-height" name="bf-height" placeholder="e.g., 175" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bf-neck">Neck Circumference (cm):</label>
+                            <input type="text" id="bf-neck" name="bf-neck" placeholder="e.g., 38" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bf-waist">Waist Circumference (cm):</label>
+                            <input type="text" id="bf-waist" name="bf-waist" placeholder="e.g., 80" required>
+                        </div>
+
+                        <div class="form-group" id="hip-group">
+                            <label for="bf-hip">Hip Circumference (cm):</label>
+                            <input type="text" id="bf-hip" name="bf-hip" placeholder="e.g., 95">
+                        </div>
+
+                        <button class="btn btn-calculate" type="submit">Calculate Body Fat %</button>
+                        <p class="note">All measurements should be in centimeters (cm) and weight in kilograms (kg).</p>
+                    </form>
+                    
+                </div>
+            </section>
+
+            <section id="calorie-calculator-section" class="tool-section">
+                <div class="tool-card">
+                    <h2>Daily Calorie Needs Calculator</h2>
+                    <p>Estimate your daily calorie needs based on your Basal Metabolic Rate (BMR) and activity level.</p>
+                    
+                    <form action="calorieCalculator" method="post">
+                        <div class="form-group">
+                            <label for="cal-gender">Gender:</label>
+                            <select id="cal-gender" name="cal-gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cal-age">Age (years):</label>
+                            <input type="number" id="cal-age" name="cal-age" placeholder="e.g., 30" min="1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cal-weight">Weight (kg):</label>
+                            <input type="number" id="cal-weight" name="cal-weight" placeholder="e.g., 70.5" step="0.1" min="1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cal-height">Height (cm):</label>
+                            <input type="number" id="cal-height" name="cal-height" placeholder="e.g., 175" step="0.1" min="1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cal-activity">Activity Level:</label>
+                            <select id="cal-activity" name="cal-activity" required>
+                                <option value="">Select Activity Level</option>
+                                <option value="1.2">Sedentary (little or no exercise)</option>
+                                <option value="1.375">Lightly Active (light exercise/sports 1-3 days/week)</option>
+                                <option value="1.55">Moderately Active (moderate exercise/sports 3-5 days/week)</option>
+                                <option value="1.725">Very Active (hard exercise/sports 6-7 days a week)</option>
+                                <option value="1.9">Extra Active (very hard exercise/physical job)</option>
+                            </select>
+                        </div>
+
+                        <button class="btn btn-calculate" type="submit">Calculate Calories</button>
+                        <p class="note">All measurements should be in metric units.</p>
+                    </form>
+                    
+                </div>
+            </section>
+
+            <section id="ibw-calculator-section" class="tool-section">
+                <div class="tool-card">
+                    <h2>Ideal Body Weight (IBW) Calculator</h2>
+                    <p>Calculate your ideal body weight based on different formulas (Devine, Robinson, Miller, Hamwi).</p>
+                    <form action="idealBodyWeightCalculator" method="post">
+                        <div class="form-group">
+                            <label for="ibw-gender">Gender:</label>
+                            <select id="ibw-gender" name="ibw-gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ibw-height">Height (cm):</label>
+                            <input type="number" id="ibw-height" name="ibw-height" placeholder="e.g., 170" step="0.1" min="50" max="250" required>
+                        </div>
+
+                        <button class="btn btn-calculate" type="submit">Calculate IBW</button>
+                        <p class="note">Please enter your height in centimeters (e.g., 175 for 5'9").</p>
+                    </form>
+                   
+                </div>
+            </section>
+
+            <section id="water-intake-calculator-section" class="tool-section">
+                <div class="tool-card">
+                    <h2>Daily Water Intake Calculator</h2>
+                    <p>Estimate your daily water intake requirements based on your weight and activity level.</p>
+                    
+                    <form action="waterIntakeCalculator" method="post">
+                        <div class="form-group">
+                            <label for="water-weight">Your Weight (kg):</label>
+                            <input type="number" id="water-weight" name="water-weight" placeholder="e.g., 70" step="0.1" min="20" max="300" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="water-activity">Activity Level:</label>
+                            <select id="water-activity" name="water-activity" required>
+                                <option value="">Select Activity Level</option>
+                                <option value="sedentary">Sedentary (Little to no exercise)</option>
+                                <option value="moderately_active">Moderately Active (Light exercise 1-3 days/week)</option>
+                                <option value="active">Active (Moderate exercise 3-5 days/week)</option>
+                                <option value="very_active">Very Active (Heavy exercise 6-7 days/week)</option>
+                            </select>
+                        </div>
+
+                        <button class="btn btn-calculate" type="submit">Calculate Water Intake</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    // --- Global User Data Storage ---
+    let currentUser = {
+        username: '',
+        ic: '',
+        gender: '', // 'male' or 'female'
+        age: null,
+        weight: null, // kg
+        height: null, // cm
+    };
+
+    // --- User Information Section Elements ---
+    const userInfoSection = document.getElementById('user-info-section');
+    const healthDashboardContainer = document.getElementById('health-dashboard-container');
+    const usernameInput = document.getElementById('username');
+    const icNumberInput = document.getElementById('ic-number');
+    const initialWeightInput = document.getElementById('initial-weight');
+    const initialHeightInput = document.getElementById('initial-height');
+    const submitUserInfoBtn = document.getElementById('submitUserInfo');
+    const userInfoErrorDiv = document.getElementById('userInfoError');
+
+    // --- Dashboard Elements for User Info Display ---
+    const displayUsername = document.getElementById('displayUsername');
+    const displayAge = document.getElementById('displayAge');
+    const displayGender = document.getElementById('displayGender');
+    const displayWeight = document.getElementById('displayWeight');
+    const displayHeight = document.getElementById('displayHeight');
+    const welcomeUsername = document.getElementById('welcomeUsername');
+    const changeUserInfoBtn = document.getElementById('changeUserInfoBtn');
+
+
+    // --- Helper Function: Calculate Age and Determine Gender from Malaysian IC ---
+    // Format: YYMMDD-PB-#### (e.g., 900101-14-5678)
+    function parseIC(ic) {
+        const icRegex = /^(\d{2})(\d{2})(\d{2})-(\d{2})-(\d{3})(\d{1})$/;
+        const match = ic.match(icRegex);
+
+        if (!match) {
+            return { error: "Invalid IC format. Please use YYMMDD-PB-####." };
+        }
+
+        const yearPart = parseInt(match[1], 10);
+        const month = parseInt(match[2], 10);
+        const day = parseInt(match[3], 10);
+        const lastDigit = parseInt(match[6], 10);
+
+        let year;
+        // Determine century for birth year (simple logic, assumes current year is 2025)
+        // If YY is <= current year's last two digits, assume 20YY, else 19YY
+        const currentYearLastTwoDigits = new Date().getFullYear() % 100;
+        if (yearPart <= currentYearLastTwoDigits) {
+            year = 2000 + yearPart;
+        } else {
+            year = 1900 + yearPart;
+        }
+
+        const dob = new Date(year, month - 1, day); // Month is 0-indexed in Date constructor
+
+        // Validate date
+        if (isNaN(dob.getTime()) || dob.getMonth() !== month - 1 || dob.getDate() !== day) {
+            return { error: "Invalid birth date in IC. Please check the YYMMDD." };
+        }
+
+        const today = new Date();
+        let age = today.getFullYear() - dob.getFullYear();
+        const m = today.getMonth() - dob.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+            age--;
+        }
+
+        const gender = (lastDigit % 2 === 0) ? 'female' : 'male';
+
+        if (age < 0 || age > 120) { // Basic sanity check for age
+            return { error: "Calculated age seems unrealistic. Please verify IC." };
+        }
+
+        return { age, gender, dob };
+    }
+
+    // --- Show User Info Form ---
+    function showUserInfoForm() {
+        userInfoSection.classList.remove('hidden');
+        healthDashboardContainer.classList.add('hidden');
+        // Reset values (optional, for re-entry)
+        usernameInput.value = currentUser.username || '';
+        icNumberInput.value = currentUser.ic || '';
+        initialWeightInput.value = currentUser.weight || '';
+        initialHeightInput.value = currentUser.height || '';
+        userInfoErrorDiv.textContent = '';
+    }
+
+    // --- Show Dashboard and Populate Fields ---
+    function showDashboard() {
+        userInfoSection.classList.add('hidden');
+        healthDashboardContainer.classList.remove('hidden');
+
+        // Update sidebar user info
+        displayUsername.textContent = currentUser.username;
+        displayAge.textContent = currentUser.age;
+        displayGender.textContent = currentUser.gender.charAt(0).toUpperCase() + currentUser.gender.slice(1);
+        displayWeight.textContent = currentUser.weight;
+        displayHeight.textContent = currentUser.height;
+        welcomeUsername.textContent = currentUser.username;
+
+        // Pre-fill health tool inputs
+        // BMI
+        document.getElementById('bmi-weight').value = currentUser.weight;
+        document.getElementById('bmi-height').value = currentUser.height;
+
+        // Body Fat
+        document.getElementById('bf-gender').value = currentUser.gender;
+        document.getElementById('bf-weight').value = currentUser.weight;
+        document.getElementById('bf-height').value = currentUser.height;
+        // Trigger change to hide/show hip for male/female
+        document.getElementById('bf-gender').dispatchEvent(new Event('change'));
+
+        // Calorie Needs
+        document.getElementById('cal-gender').value = currentUser.gender;
+        document.getElementById('cal-age').value = currentUser.age;
+        document.getElementById('cal-weight').value = currentUser.weight;
+        document.getElementById('cal-height').value = currentUser.height;
+
+        // IBW
+        document.getElementById('ibw-gender').value = currentUser.gender;
+        document.getElementById('ibw-height').value = currentUser.height;
+
+        // Water Intake
+        document.getElementById('water-weight').value = currentUser.weight;
+
+        // Automatically show dashboard section (default)
+        showSection('dashboard-section');
+        const defaultNavLink = document.querySelector('.nav-link[data-target="dashboard-section"]');
+        if (defaultNavLink) {
+            navLinks.forEach(link => link.classList.remove('active'));
+            defaultNavLink.classList.add('active');
+        }
+    }
+
+    // --- Event Listener for User Info Submission ---
+    if (submitUserInfoBtn) {
+        submitUserInfoBtn.addEventListener('click', function() {
+            const username = usernameInput.value.trim();
+            const icNumber = icNumberInput.value.trim();
+            const weight = parseFloat(initialWeightInput.value);
+            const height = parseFloat(initialHeightInput.value);
+
+            if (!username || !icNumber || isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
+                userInfoErrorDiv.innerHTML = "Please fill in all fields with valid positive numbers for weight and height.";
+                userInfoErrorDiv.style.color = 'red';
+                return;
+            }
+
+            const icParseResult = parseIC(icNumber);
+            if (icParseResult.error) {
+                userInfoErrorDiv.innerHTML = icParseResult.error;
+                userInfoErrorDiv.style.color = 'red';
+                return;
+            }
+
+            // All validations passed, store data and show dashboard
+            currentUser.username = username;
+            currentUser.ic = icNumber;
+            currentUser.age = icParseResult.age;
+            currentUser.gender = icParseResult.gender;
+            currentUser.weight = weight;
+            currentUser.height = height;
+
+            userInfoErrorDiv.textContent = ''; // Clear any previous errors
+            showDashboard();
+        });
+    }
+
+    // --- Event Listener for "Change Info" Button in Sidebar ---
+    if (changeUserInfoBtn) {
+        changeUserInfoBtn.addEventListener('click', function() {
+            showUserInfoForm();
+        });
+    }
+
+    // --- Sidebar Toggle Functionality (from previous code) ---
+    const toggleSidebarBtn = document.getElementById('toggleSidebarBtn');
+    const sidebar = document.getElementById('sidebar');
+
+    if (toggleSidebarBtn && sidebar) {
+        toggleSidebarBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('collapsed');
+        });
+
+        function handleSidebarResponsiveness() {
+            if (window.innerWidth <= 992) {
+                sidebar.classList.add('collapsed');
+            } else {
+                sidebar.classList.remove('collapsed');
+            }
+            if (window.innerWidth <= 576) {
+                sidebar.classList.remove('collapsed');
+            }
+        }
+        // No initial check on load, let showUserInfoForm handle visibility initially
+        window.addEventListener('resize', handleSidebarResponsiveness);
+    }
+
+    // --- Section Navigation Functionality (from previous code) ---
+    const navLinks = document.querySelectorAll('.nav-link');
+    const toolSections = document.querySelectorAll('.tool-section');
+    const currentToolTitle = document.getElementById('currentToolTitle');
+
+    function showSection(targetId) {
+        toolSections.forEach(section => {
+            section.classList.remove('active');
+        });
+        const activeSection = document.getElementById(targetId);
+        if (activeSection) {
+            activeSection.classList.add('active');
+            const sectionTitle = activeSection.querySelector('h2');
+            if (sectionTitle) {
+                currentToolTitle.textContent = sectionTitle.textContent;
+            } else {
+                currentToolTitle.textContent = "Dashboard Overview";
+            }
+        }
+    }
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+
+            if (healthDashboardContainer.classList.contains('hidden')) {
+                // Prevent navigation if dashboard is not active (user info not entered)
+                return;
+            }
+
+            navLinks.forEach(item => item.classList.remove('active'));
+            this.classList.add('active');
+
+            const targetSectionId = this.dataset.target;
+            showSection(targetSectionId);
+            window.history.pushState(null, '', `#${targetSectionId.replace('-section', '')}`);
+        });
+    });
+
+    window.addEventListener('popstate', function() {
+        if (!healthDashboardContainer.classList.contains('hidden')) { // Only handle if dashboard is visible
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                showSection(hash + '-section');
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.dataset.target === hash + '-section') {
+                        link.classList.add('active');
+                    }
+                });
+            } else {
+                showSection('dashboard-section');
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.dataset.target === 'dashboard-section') {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        }
+    });
+
+    // --- BMI Calculator Logic ---
+    const bmiWeightInput = document.getElementById('bmi-weight');
+    const bmiHeightInput = document.getElementById('bmi-height');
+    const calculateBmiBtn = document.getElementById('calculateBmi');
+    const bmiResultDiv = document.getElementById('bmiResult');
+
+    if (calculateBmiBtn) {
+        calculateBmiBtn.addEventListener('click', function() {
+            const weightKg = parseFloat(bmiWeightInput.value);
+            const heightCm = parseFloat(bmiHeightInput.value);
+
+            if (isNaN(weightKg) || isNaN(heightCm) || weightKg <= 0 || heightCm <= 0) {
+                bmiResultDiv.innerHTML = "Please enter valid positive numbers for weight and height.";
+                bmiResultDiv.style.color = 'red';
+                return;
+            }
+
+            const heightM = heightCm / 100;
+            const bmi = weightKg / (heightM * heightM);
+            let category = '';
+
+            if (bmi < 18.5) {
+                category = 'Underweight';
+            } else if (bmi >= 18.5 && bmi <= 24.9) {
+                category = 'Normal weight';
+            } else if (bmi >= 25 && bmi <= 29.9) {
+                category = 'Overweight';
+            } else {
+                category = 'Obesity';
+            }
+
+            bmiResultDiv.innerHTML = `Your BMI is: <strong>${bmi.toFixed(2)}</strong><br>Category: <strong>${category}</strong>`;
+            bmiResultDiv.style.color = '#0056b3';
+        });
+    }
+
+    // --- Body Fat % Calculator Logic ---
+    const bfGenderSelect = document.getElementById('bf-gender');
+    const bfWeightInput = document.getElementById('bf-weight');
+    const bfHeightInput = document.getElementById('bf-height');
+    const bfNeckInput = document.getElementById('bf-neck');
+    const bfWaistInput = document.getElementById('bf-waist');
+    const bfHipInput = document.getElementById('bf-hip');
+    const bfHipGroup = document.getElementById('bf-hip-group');
+    const calculateBodyFatBtn = document.getElementById('calculateBodyFat');
+    const bodyFatResultDiv = document.getElementById('bodyFatResult');
+
+    if (bfGenderSelect) {
+        bfGenderSelect.addEventListener('change', function() {
+            if (this.value === 'male') {
+                bfHipGroup.style.display = 'none';
+                bfHipInput.value = '';
+            } else {
+                bfHipGroup.style.display = 'block';
+            }
+        });
+        // Trigger change on load if an initial value is set by pre-fill
+        // bfGenderSelect.dispatchEvent(new Event('change')); // Uncomment if you want to trigger on initial load based on pre-fill
+    }
+
+    if (calculateBodyFatBtn) {
+        calculateBodyFatBtn.addEventListener('click', function() {
+            const gender = bfGenderSelect.value;
+            const weightKg = parseFloat(bfWeightInput.value);
+            const heightCm = parseFloat(bfHeightInput.value);
+            const neckCm = parseFloat(bfNeckInput.value);
+            const waistCm = parseFloat(bfWaistInput.value);
+            let hipCm = 0;
+
+            if (gender === 'female') {
+                hipCm = parseFloat(bfHipInput.value);
+            }
+
+            if (isNaN(weightKg) || isNaN(heightCm) || isNaN(neckCm) || isNaN(waistCm) ||
+                weightKg <= 0 || heightCm <= 0 || neckCm <= 0 || waistCm <= 0 ||
+                (gender === 'female' && (isNaN(hipCm) || hipCm <= 0))) {
+                bodyFatResultDiv.innerHTML = "Please enter valid positive numbers for all measurements.";
+                bodyFatResultDiv.style.color = 'red';
+                return;
+            }
+
+            let bodyFatPercentage;
+            const heightInches = heightCm / 2.54;
+            const neckInches = neckCm / 2.54;
+            const waistInches = waistCm / 2.54;
+            const hipInches = hipCm / 2.54;
+
+            if (gender === 'male') {
+                bodyFatPercentage = 495 / (1.0324 - 0.19077 * Math.log10(waistInches - neckInches) + 0.15456 * Math.log10(heightInches)) - 450;
+            } else {
+                bodyFatPercentage = 495 / (1.29579 - 0.35004 * Math.log10(waistInches + hipInches - neckInches) + 0.22100 * Math.log10(heightInches)) - 450;
+            }
+
+            if (isNaN(bodyFatPercentage) || bodyFatPercentage < 0 || bodyFatPercentage > 100) {
+                bodyFatResultDiv.innerHTML = "Could not calculate. Please double-check your measurements.";
+                bodyFatResultDiv.style.color = 'red';
+                return;
+            }
+
+            let category = '';
+            if (gender === 'male') {
+                if (bodyFatPercentage <= 6) category = 'Essential Fat';
+                else if (bodyFatPercentage <= 13) category = 'Athletes';
+                else if (bodyFatPercentage <= 17) category = 'Fitness';
+                else if (bodyFatPercentage <= 24) category = 'Acceptable';
+                else category = 'Obese';
+            } else {
+                if (bodyFatPercentage <= 13) category = 'Essential Fat';
+                else if (bodyFatPercentage <= 20) category = 'Athletes';
+                else if (bodyFatPercentage <= 24) category = 'Fitness';
+                else if (bodyFatPercentage <= 31) category = 'Acceptable';
+                else category = 'Obese';
+            }
+
+            bodyFatResultDiv.innerHTML = `Your Body Fat % is: <strong>${bodyFatPercentage.toFixed(2)}%</strong><br>Category: <strong>${category}</strong>`;
+            bodyFatResultDiv.style.color = '#0056b3';
+        });
+    }
+
+    // --- Calorie Needs Calculator Logic ---
+    const calGenderSelect = document.getElementById('cal-gender');
+    const calAgeInput = document.getElementById('cal-age');
+    const calWeightInput = document.getElementById('cal-weight');
+    const calHeightInput = document.getElementById('cal-height');
+    const calActivitySelect = document.getElementById('cal-activity');
+    const calculateCaloriesBtn = document.getElementById('calculateCalories');
+    const calorieResultDiv = document.getElementById('calorieResult');
+
+    if (calculateCaloriesBtn) {
+        calculateCaloriesBtn.addEventListener('click', function() {
+            const gender = calGenderSelect.value;
+            const age = parseFloat(calAgeInput.value);
+            const weightKg = parseFloat(calWeightInput.value);
+            const heightCm = parseFloat(calHeightInput.value);
+            const activityFactor = parseFloat(calActivitySelect.value);
+
+            if (isNaN(age) || isNaN(weightKg) || isNaN(heightCm) || age <= 0 || weightKg <= 0 || heightCm <= 0) {
+                calorieResultDiv.innerHTML = "Please enter valid positive numbers for age, weight, and height.";
+                calorieResultDiv.style.color = 'red';
+                return;
+            }
+
+            let bmr;
+            if (gender === 'male') {
+                bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * age) + 5;
+            } else {
+                bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * age) - 161;
+            }
+
+            const tdee = bmr * activityFactor;
+
+            calorieResultDiv.innerHTML = `Estimated BMR: <strong>${bmr.toFixed(0)} calories/day</strong><br>
+                                            Estimated Daily Calorie Needs (TDEE): <strong>${tdee.toFixed(0)} calories/day</strong>`;
+            calorieResultDiv.style.color = '#0056b3';
+        });
+    }
+
+    // --- Ideal Body Weight (IBW) Calculator Logic ---
+    const ibwGenderSelect = document.getElementById('ibw-gender');
+    const ibwHeightInput = document.getElementById('ibw-height');
+    const calculateIbwBtn = document.getElementById('calculateIbw');
+    const ibwResultDiv = document.getElementById('ibwResult');
+
+    if (calculateIbwBtn) {
+        calculateIbwBtn.addEventListener('click', function() {
+            const gender = ibwGenderSelect.value;
+            const heightCm = parseFloat(ibwHeightInput.value);
+
+            if (isNaN(heightCm) || heightCm <= 0) {
+                ibwResultDiv.innerHTML = "Please enter a valid positive number for height.";
+                ibwResultDiv.style.color = 'red';
+                return;
+            }
+
+            const heightInches = heightCm / 2.54;
+
+            let ibwResults = {};
+
+            if (gender === 'male') {
+                ibwResults.devine = 50 + 2.3 * Math.max(0, heightInches - 60);
+                ibwResults.robinson = 52 + 1.9 * Math.max(0, heightInches - 60);
+                ibwResults.miller = 56.2 + 1.41 * Math.max(0, heightInches - 60);
+                ibwResults.hamwi = 48 + 2.7 * Math.max(0, heightInches - 60);
+            } else {
+                ibwResults.devine = 45.5 + 2.3 * Math.max(0, heightInches - 60);
+                ibwResults.robinson = 49 + 1.7 * Math.max(0, heightInches - 60);
+                ibwResults.miller = 53.1 + 1.36 * Math.max(0, heightInches - 60);
+                ibwResults.hamwi = 45.5 + 2.2 * Math.max(0, heightInches - 60);
+            }
+
+            let resultHtml = `Your height: <strong>${heightCm} cm (${heightInches.toFixed(1)} inches)</strong><br><br>
+                                Ideal Body Weight (IBW) estimates:<br>
+                                <ul>
+                                    <li>Devine: <strong>${ibwResults.devine.toFixed(1)} kg</strong></li>
+                                    <li>Robinson: <strong>${ibwResults.robinson.toFixed(1)} kg</strong></li>
+                                    <li>Miller: <strong>${ibwResults.miller.toFixed(1)} kg</strong></li>
+                                    <li>Hamwi: <strong>${ibwResults.hamwi.toFixed(1)} kg</strong></li>
+                                </ul>
+                                <small>Note: These are estimates based on different formulas. Consult a healthcare professional for personalized advice.</small>`;
+            ibwResultDiv.innerHTML = resultHtml;
+            ibwResultDiv.style.color = '#0056b3';
+        });
+    }
+
+    // --- Water Intake Calculator Logic ---
+    const waterWeightInput = document.getElementById('water-weight');
+    const waterActivitySelect = document.getElementById('water-activity');
+    const calculateWaterBtn = document.getElementById('calculateWater');
+    const waterResultDiv = document.getElementById('waterResult');
+
+    if (calculateWaterBtn) {
+        calculateWaterBtn.addEventListener('click', function() {
+            const weightKg = parseFloat(waterWeightInput.value);
+            const activityLevel = waterActivitySelect.value;
+
+            if (isNaN(weightKg) || weightKg <= 0) {
+                waterResultDiv.innerHTML = "Please enter a valid positive number for weight.";
+                waterResultDiv.style.color = 'red';
+                return;
+            }
+
+            let waterOunces = (weightKg * 2.20462) * (2/3);
+
+            if (activityLevel === 'moderate') {
+                waterOunces += 12;
+            } else if (activityLevel === 'high') {
+                waterOunces += 24;
+            }
+
+            const waterLiters = waterOunces * 0.0295735;
+
+            waterResultDiv.innerHTML = `Recommended Daily Water Intake:<br>
+                                        <strong>${waterLiters.toFixed(2)} Liters</strong> (approx. ${waterOunces.toFixed(0)} ounces)`;
+            waterResultDiv.style.color = '#0056b3';
+        });
+    }
+
+    // --- Initial Load: Show user info form ---
+    showUserInfoForm();
+    // After the initial form is submitted and dashboard is shown, then
+    // the sidebar responsiveness listener will also apply.
+    // Call it here to set initial collapsed state if window is small
+    handleSidebarResponsiveness(); // Ensure sidebar starts collapsed on small screens if applicable
+});
+
+        </script>
+</body>
+</html>
